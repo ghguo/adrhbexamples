@@ -116,7 +116,7 @@ var pbjs = pbjs || {};
 pbjs.que = pbjs.que || [];
 
 var adDivIds = ['div-4','div-3','div-2','/21901351985/header-bid-tag-0'];
-document.addEventListener("DOMContentLoaded", function(event){ adrtags("D435C107A8844E15BAA5D4A9B7D94FC5", adUnits, adDivIds); });
+document.addEventListener("DOMContentLoaded", function(event){ adrtags(adUnits, adDivIds); });
 </script>
 ```
 
