@@ -151,12 +151,17 @@ Put the above code in the page ```<head>``` section. And make sure your page has
 # Examples
 Here are a few content types (IAB Categories) in the /ContentExamples.
 
+Pets: how-you-can-maintain-your-pets-dental-health.html
+[Click to see the live page](https://www.adrelevantis.com/hb/how-you-can-maintain-your-pets-dental-health.html)
+
 Cooking: essential-french-onion-soup.html
+[Click to see the live page](https://www.adrelevantis.com/hb/essential-french-onion-soup.html)
 
 Entertainment: laura-marano-new-single-let-me-cry.html
+[Click to see the live page](https://www.adrelevantis.com/hb/laura-marano-new-single-let-me-cry.html)
 
 Home and Garden: the-impracticality-of-hardwood-flooring.html
-
-Pets: how-you-can-maintain-your-pets-dental-health.html
+[Click to see the live page](https://www.adrelevantis.com/hb/the-impracticality-of-hardwood-flooring.html)
 
 Sports: big-ten-reporters-pick-michigan-to-win-league-title-in-2019.html
+[Click to see the live page](https://www.adrelevantis.com/hb/big-ten-reporters-pick-michigan-to-win-league-title-in-2019.html)
