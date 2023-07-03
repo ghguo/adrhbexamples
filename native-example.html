@@ -1,0 +1,314 @@
+<html>
+  <head>
+  <script async src="//acdn.adnxs.com/prebid/not-for-prod/prebid.js"></script>
+  <script>
+    var PREBID_TIMEOUT = 3000;
+    var FAILSAFE_TIMEOUT = 5000;
+
+    var adUnits = [{
+	  code: 'div_1',
+	  sizes: [
+		[360, 360]
+	  ],
+	  mediaTypes: {
+		native: {
+		  title: {
+			required: true
+		  },
+		  image: {
+			required: true
+		  },
+		  sponsoredBy: {
+			required: true
+		  }
+		}
+	  },
+	  bids: [{
+		bidder: 'adrelevantis',
+		params: {
+		  placementId: 13232354,
+		  allowSmallerSizes: true
+		}
+	  }]
+	},
+	{
+	  code: 'div_2',
+	  sizes: [
+		[250, 250]
+	  ],
+	  mediaTypes: {
+		native: {
+		  title: {
+			required: true
+		  },
+		  image: {
+			required: true
+		  },
+		  sponsoredBy: {
+			required: true
+		  }
+		}
+	  },
+	  bids: [{
+		bidder: 'adrelevantis',
+		params: {
+		  placementId: 13232354,
+		  allowSmallerSizes: true,
+		  cpm: 0.50
+		}
+	  }]
+	},
+	{
+	  code: 'div_3',
+	  sizes: [
+		[1, 1]
+	  ],
+	  mediaTypes: {
+		native: {
+		  title: {
+			required: true
+		  },
+		  body: {
+			required: true
+		  },
+		  image: {
+			required: true
+		  },
+		  sponsoredBy: {
+			required: true
+		  },
+		  icon: {
+			required: false
+		  },
+		}
+	  },
+	  bids: [{
+		bidder: 'adrelevantis',
+		params: {
+		  placementId: 13232354,
+		  allowSmallerSizes: true
+		}
+	  }]
+	}];
+    var pbjs = pbjs || {};
+    pbjs.que = pbjs.que || [];
+	
+  </script>
+
+    <script>
+function adrads(adUnits, adDivIds)
+{
+  pbjs.que.push(function() {
+    pbjs.setBidderConfig({
+      bidders: ['adrelevantis'],
+      config: {
+        fpd: {
+          context: {
+            keywords: ['US Open'],
+            data: {
+              category: '/sports/golf'
+            }
+          }
+        }
+      }
+    });
+    pbjs.addAdUnits(adUnits);
+    pbjs.requestBids({
+      bidsBackHandler: initAdserver,
+      timeout: PREBID_TIMEOUT
+    });
+  });
+  
+  function initAdserver(bids) {
+    if (pbjs.initAdserverSet) return;
+    pbjs.initAdserverSet = true;
+    for (let au in adUnits) {
+      if (adUnits[au].mediaTypes.native && bids[adUnits[au].code] && bids[adUnits[au].code].bids && bids[adUnits[au].code].bids[0]) {
+        var b = bids[adUnits[au].code].bids[0];
+        var o = document.getElementById(adDivIds[au]);
+        var n = o.cloneNode(false);
+          
+        var e = document.createElement("IFRAME"),
+        g = e.style;
+        imp = '<div style="position:absolute;left:0px;top:0px;visibility:hidden;"><img src=' + b.native.impressionTrackers[0] + '></div>';
+        if (adUnits[au].sizes[0][0] == 1 && adUnits[au].sizes[0][1] == 1) {
+          e.scrolling = "no";
+          e.frameBorder = 0;
+          e.width = 0;
+          e.height = 99;
+          g.border = 0;
+          g.minWidth = "100%";
+          g.verticalAlign = "bottom";
+            
+          n.appendChild(e);
+          o.parentNode.replaceChild(n, o);
+            
+          var h = e.contentDocument || e.contentWindow.document;
+          h.open();
+          h.writeln("<!DOCTYPE html>");
+          h.writeln("<html>");
+          h.writeln('<head><meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">');
+          h.writeln('<style>');
+          h.writeln('.sponsored-post {');
+          h.writeln('  background-color: #fffdeb;');
+          h.writeln('  font-family: sans-serif;');
+          h.writeln('  padding: 10px 20px 10px 20px;');
+          h.writeln('}');
+          h.writeln('.content {');
+          h.writeln('  overflow: hidden;');
+          h.writeln('}');
+          h.writeln('.thumbnail {');
+          h.writeln('  width: 120px;');
+          h.writeln('  height: 100px;');
+          h.writeln('  float: left;');
+          h.writeln('  margin: 0 20px 10px 0;');
+          h.writeln('  background-image: url(' + b.native.image.url + ');');
+          h.writeln('  background-size: cover;');
+          h.writeln('}');
+          h.writeln('h1 {');
+          h.writeln('  font-size: 18px;');
+          h.writeln('  margin: 0;');
+          h.writeln('}');
+          h.writeln('a {');
+          h.writeln('  color: #0086b3;');
+          h.writeln('  text-decoration: none;');
+          h.writeln('}');
+          h.writeln('p {');
+          h.writeln('  font-size: 16px;');
+          h.writeln('  color: #444;');
+          h.writeln('  margin: 10px 0 10px 0;');
+          h.writeln('}');
+          h.writeln('.attribution {');
+          h.writeln('  color: #fff;');
+          h.writeln('  font-size: 9px;');
+          h.writeln('  font-weight: bold;');
+          h.writeln('  display: inline-block;');
+          h.writeln('  letter-spacing: 2px;');
+          h.writeln('  background-color: #ffd724;');
+          h.writeln('  border-radius: 2px;');
+          h.writeln('  padding: 4px;');
+          h.writeln('}');
+          h.writeln('</style>');
+          h.writeln('</head>');
+          h.writeln('<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">');
+          h.writeln('  <div class="sponsored-post">');
+          h.writeln('    <div class="thumbnail">');
+          h.writeln('    </div>');
+          h.writeln('    <div class="content">');
+          h.writeln('      <h1>');
+          h.writeln('        <a href="' + b.native.clickUrl + '" target="_blank">' + b.native.title);
+          h.writeln('        </a>');
+          h.writeln('      </h1>');
+          h.writeln('      <p>' + b.native.body +'</p>');
+          h.writeln('    </div>');
+          h.writeln('    <div class="attribution">');
+          h.writeln('      <img src="' + b.native.icon.url + '" height="10" width="10">' + b.native.sponsoredBy);
+          h.writeln('    </div>');
+          h.writeln('  </div>');
+          h.writeln(imp);
+          h.writeln('</body>');
+          h.writeln("</html>");
+          h.close()
+        }
+        else {
+          e.scrolling = "no";
+          e.frameBorder = 0;
+          e.marginWidth = 0;
+          e.marginHeight = 0;
+          e.width = adUnits[au].sizes[0][0];
+          e.height = adUnits[au].sizes[0][1];
+          g.border = 0;
+          g.verticalAlign = "bottom";
+            
+          n.appendChild(e);
+          o.parentNode.replaceChild(n, o);
+            
+          var h = e.contentDocument || e.contentWindow.document;
+          h.open();
+          h.writeln("<!DOCTYPE html>");
+          h.writeln("<html>");
+          h.writeln('<head><meta charset="UTF-8">');
+          h.writeln('<style>');
+          h.writeln('body {');
+          h.writeln('background: url(' + b.native.image.url + ') no-repeat;');
+          h.writeln('background-size: cover;');
+          h.writeln('background-position: center;');
+          h.writeln('font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;');
+          h.writeln('font-size: 14px;');
+          h.writeln('line-height: 1.42857143;');
+          h.writeln('color: #333;');
+          h.writeln('background-color: #fff;');
+          h.writeln('}');
+          h.writeln('.card {');
+          h.writeln('padding: ' + e.width/18 + 'px;');
+          h.writeln('height: ' + (e.width - e.width/9 - 8) +'px;');
+          h.writeln('}');
+          h.writeln('a:link, a:active, a:visited, a:hover, a:focus {');
+          h.writeln('text-decoration: none;');
+          h.writeln('color: #fff;');
+          h.writeln('}');
+          h.writeln('h1 {');
+          h.writeln('line-height: 1.3;');
+          h.writeln('color: #fff;');
+          h.writeln('font-size: ' + e.width/14 + 'px;');
+          h.writeln('background-color: #000;');
+          h.writeln('display: inline;');
+          h.writeln('font-family: Roboto, serif;');
+          h.writeln('font-weight: 100;');
+          h.writeln('}');
+          h.writeln('.attribution {');
+          h.writeln('color: rgba(0, 0, 0, 0.7);');
+          h.writeln('display: inline-block;');
+          h.writeln('letter-spacing: 2px;');
+          h.writeln('background-color: #ffd724;');
+          h.writeln('font-size: ' + e.width/25 + 'px;');
+          h.writeln('font-weight: bold;');
+          h.writeln('line-height: 1;');
+          h.writeln('padding: ' + e.width/60 + 'px '+ e.width/60 + 'px 0 ' + e.width/60 + 'px;');
+          h.writeln('height: ' + e.width/15 + 'px;');
+          h.writeln('margin: ' + e.width/72 + 'px 0 ' + e.width/36 + 'px 0;');
+          h.writeln('border-radius: 4px;');
+          h.writeln('}');
+          h.writeln('</style>');
+          h.writeln('</head>');
+          h.writeln('<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">');
+          h.writeln('<a href="' + b.native.clickUrl + '" target="_blank">');
+          h.writeln('  <div class="card">');
+          h.writeln('    <div class="title">');
+          h.writeln('      <h1>' + (b.native.title.length>60?b.native.title.substring(0, 60)+'...':b.native.title));
+          h.writeln('      </h1>');
+          h.writeln('    </div>');
+          h.writeln('    <div class="attribution">' + b.native.sponsoredBy);
+          h.writeln('    </div>');
+          h.writeln('  </div>');
+          h.writeln('</a>');
+          h.writeln(imp);
+          h.writeln("</body>");
+          h.writeln("</html>");
+          h.close()
+        }
+      }
+    }
+  }
+  setTimeout(function(bids) {
+    initAdserver(bids);
+  }, FAILSAFE_TIMEOUT);
+};
+ 
+  </script>
+
+    <script>
+      var adDivIds = ['div1','div2','div3'];
+      adrads(adUnits, adDivIds);
+    </script>
+  </head>
+  <body>
+    <h2>Native Content-Driven Advertising Examples</h2>
+    <div id='div1'>
+    </div>
+    <div id='div2'>
+    </div>
+    <div id='div3'>
+    </div>
+  </body>
+</html>
