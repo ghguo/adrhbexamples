@@ -9,7 +9,7 @@ Drop the following code to your page to display ads relevant to the page content
 
 ```
 <script async src="//www.googletagservices.com/tag/js/gpt.js"></script>
-  <script async src="//www.adrelevantis.com/pub/prebid.js"></script>
+<script async src="//www.adrelevantis.com/pub/prebid.js"></script>
 <script>
 //Content-Driven Advertising refers to individual pages
 //Set referrer to no-referrer-when-downgrade to ensure safety while providing page path
