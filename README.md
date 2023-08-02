@@ -9,23 +9,92 @@ Drop the following code to your page to display ads relevant to the page content
 
 ```
 <script async src="//www.googletagservices.com/tag/js/gpt.js"></script>
-<script async src="//www.adrelevantis.com/pub/prebid.js"></script>
-<script src="//www.adrelevantis.com/pub/contentdriventag.js"></script>
+  <script async src="//www.adrelevantis.com/pub/prebid.js"></script>
 <script>
-var adUnits = [
+//Content-Driven Advertising refers to individual pages
+//Set referrer to no-referrer-when-downgrade to ensure safety while providing page path
+if (document.querySelector('meta[name="referrer"]') === null){
+  var meta = document.createElement('meta');
+  meta.name = "referrer";
+  meta.content = "no-referrer-when-downgrade";
+  document.getElementsByTagName('head')[0].appendChild(meta);
+}
+else {
+  document.querySelector('meta[name="referrer"]').content = "no-referrer-when-downgrade";
+}
+
+//Content-Driven Advertising needs content accessible. So, wait DOMContentLoaded event to start the process
+document.addEventListener("DOMContentLoaded", function(event){ adrtags(); });
+
+var googletag = googletag || {};
+googletag.cmd = googletag.cmd || [];
+
+var PREBID_TIMEOUT = 3000;
+var FAILSAFE_TIMEOUT = 6000;
+
+var pbjs = pbjs || {};
+pbjs.que = pbjs.que || [];
+
+//Parse content, then, start bid process
+function adrtags() {
+  var q = document.getElementsByTagName('body')[0].innerText;
+  
+  var pload = 'q=' + encodeURIComponent(q);
+  var h = new XMLHttpRequest();
+  h.onreadystatechange = function () {
+    if (4 === this.readyState) {
+      if (200 === this.status) {
+        var res = JSON.parse(this.responseText);
+        if (res != null){
+		  adrads(res)
+		}
+      }
+    }
+  };
+  h.open("POST", "https://api.adrelevantis.com/getcatskeywords", true);
+  h.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  h.send(pload)
+} 
+  
+//Keywords and IAB Categories of the content are sent as bidder parameters
+function adrads(res)
+{
+  var cats = res["Category"];
+  var keywrds = [];
+  res["Keyword"].split("|").forEach((itm) => {
+	keywrds.push(itm);
+  })
+  
+  pbjs.que.push(function() {
+    pbjs.setBidderConfig({
+      bidders: ['adrelevantis'],
+      config: {
+        ortb2: {
+          site: {
+            keywords: keywrds.join(','),
+            ext: {
+			  data: {category: cats}
+			}
+          }
+        }
+      }
+    });
+
+    var adUnits = [
 	{
 	  code: 'div-4',
-	  sizes: [
-		[250, 250]
-	  ],
 	  mediaTypes: {
 		native: {
+		  sendTargetingKeys: false,
 		  title: {
 			required: true
 		  },
 		  image: {
 			required: true
 		  },
+          clickUrl: {
+            required: true
+          },
 		  sponsoredBy: {
 			required: true
 		  }
@@ -35,23 +104,25 @@ var adUnits = [
 		bidder: 'adrelevantis',
 		params: {
 		  placementId: 13232354,
-		  allowSmallerSizes: true
+		  allowSmallerSizes: true,
+		  cpm: 0.9
 		}
 	  }]
 	},
 	{
 	  code: 'div-3',
-	  sizes: [
-		[250, 250]
-	  ],
 	  mediaTypes: {
 		native: {
+		  sendTargetingKeys: false,
 		  title: {
 			required: true
 		  },
 		  image: {
 			required: true
 		  },
+          clickUrl: {
+            required: true
+          },
 		  sponsoredBy: {
 			required: true
 		  }
@@ -61,17 +132,16 @@ var adUnits = [
 		bidder: 'adrelevantis',
 		params: {
 		  placementId: 13232354,
-		  allowSmallerSizes: true
+		  allowSmallerSizes: true,
+		  cpm: 0.9
 		}
 	  }]
 	},
 	{
 	  code: 'div-2',
-	  sizes: [
-		[250, 250]
-	  ],
 	  mediaTypes: {
 		native: {
+		  sendTargetingKeys: false,
 		  title: {
 			required: true
 		  },
@@ -87,7 +157,36 @@ var adUnits = [
 		bidder: 'adrelevantis',
 		params: {
 		  placementId: 13232354,
-		  allowSmallerSizes: true
+		  allowSmallerSizes: true,
+		  cpm: 0.9
+		}
+	  }]
+	},
+	{
+	  code: 'div-1',
+	  mediaTypes: {
+		native: {
+		  sendTargetingKeys: false,
+		  title: {
+			required: true
+		  },
+		  image: {
+			required: true
+		  },
+          clickUrl: {
+            required: true
+          },
+		  sponsoredBy: {
+			required: true
+		  }
+		}
+	  },
+	  bids: [{
+		bidder: 'adrelevantis',
+		params: {
+		  placementId: 13232354,
+		  allowSmallerSizes: true,
+		  cpm: 0.9
 		}
 	  }]
 	},
@@ -105,18 +204,43 @@ var adUnits = [
 				cpm: 0.50
 			}
 		}]
-	}
-];
-var googletag = googletag || {};
-googletag.cmd = googletag.cmd || [];
-googletag.cmd.push(function() {
-	googletag.pubads().disableInitialLoad();
-});
-var pbjs = pbjs || {};
-pbjs.que = pbjs.que || [];
+	}];
+	
+	googletag.cmd.push(function() {
+	  var slot1 = googletag.defineSlot('/21901351985/native_horizontal', 'fluid', 'div-4').addService(googletag.pubads());
+	  var slot1 = googletag.defineSlot('/21901351985/native_vertical', 'fluid', 'div-3').addService(googletag.pubads());
+	  var slot1 = googletag.defineSlot('/21901351985/native_square', 'fluid', 'div-2').addService(googletag.pubads());
+	  var slot1 = googletag.defineSlot('/21901351985/native_nature', 'fluid', 'div-1').addService(googletag.pubads());
+	  var slot2 = googletag.defineSlot('/21901351985/header-bid-tag-0', [[728, 90]], '/21901351985/header-bid-tag-0').addService(googletag.pubads());
+	  googletag.pubads().disableInitialLoad();
+	  googletag.pubads().enableSingleRequest();
+	  googletag.enableServices();
+	});
 
-var adDivIds = ['div-4','div-3','div-2','/21901351985/header-bid-tag-0'];
-document.addEventListener("DOMContentLoaded", function(event){ adrtags(adUnits, adDivIds); });
+    pbjs.addAdUnits(adUnits);
+    pbjs.requestBids({
+      bidsBackHandler: initAdserver,
+      timeout: PREBID_TIMEOUT
+    });
+  });
+
+  function initAdserver(bids) {
+    if (pbjs.initAdserverSet) return;
+    
+	googletag.cmd.push(function() {
+      pbjs.que.push(function() {
+        pbjs.setTargetingForGPTAsync();
+        googletag.pubads().refresh();
+      });
+    });
+	
+    pbjs.initAdserverSet = true;
+  }
+  
+  setTimeout(function(bids) {
+    initAdserver(bids);
+  }, FAILSAFE_TIMEOUT);
+};
 </script>
 ```
 

@@ -1,26 +1,96 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <script async src="//www.googletagservices.com/tag/js/gpt.js"></script>
   <script async src="//www.adrelevantis.com/pub/prebid.js"></script>
-  <script src="//www.adrelevantis.com/pub/contentdriventag.js"></script>
-  <script>
+<script>
+//Content-Driven Advertising refers to individual pages
+//Set referrer to no-referrer-when-downgrade to ensure safety while providing page path
+if (document.querySelector('meta[name="referrer"]') === null){
+  var meta = document.createElement('meta');
+  meta.name = "referrer";
+  meta.content = "no-referrer-when-downgrade";
+  document.getElementsByTagName('head')[0].appendChild(meta);
+}
+else {
+  document.querySelector('meta[name="referrer"]').content = "no-referrer-when-downgrade";
+}
+
+//Content-Driven Advertising needs content accessible. So, wait DOMContentLoaded event to start the process
+document.addEventListener("DOMContentLoaded", function(event){ adrtags(); });
+
+var googletag = googletag || {};
+googletag.cmd = googletag.cmd || [];
+
+var PREBID_TIMEOUT = 3000;
+var FAILSAFE_TIMEOUT = 6000;
+
+var pbjs = pbjs || {};
+pbjs.que = pbjs.que || [];
+
+//Parse content, then, start bid process
+function adrtags() {
+  var q = document.getElementsByTagName('body')[0].innerText;
+  
+  var pload = 'q=' + encodeURIComponent(q);
+  var h = new XMLHttpRequest();
+  h.onreadystatechange = function () {
+    if (4 === this.readyState) {
+      if (200 === this.status) {
+        var res = JSON.parse(this.responseText);
+        if (res != null){
+		  adrads(res)
+		}
+      }
+    }
+  };
+  h.open("POST", "https://api.adrelevantis.com/getcatskeywords", true);
+  h.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  h.send(pload)
+} 
+  
+//Keywords and IAB Categories of the content are sent as bidder parameters
+function adrads(res)
+{
+  var cats = res["Category"];
+  var keywrds = [];
+  res["Keyword"].split("|").forEach((itm) => {
+	keywrds.push(itm);
+  })
+  
+  pbjs.que.push(function() {
+    pbjs.setBidderConfig({
+      bidders: ['adrelevantis'],
+      config: {
+        ortb2: {
+          site: {
+            keywords: keywrds.join(','),
+            ext: {
+			  data: {category: cats}
+			}
+          }
+        }
+      }
+    });
+
 	var adUnits = [
 	{
-	  code: 'div-4',
+	  code: 'div-1',
 	  sizes: [
-		[300, 300]
+		[120, 120]
 	  ],
 	  mediaTypes: {
 		native: {
+		  sendTargetingKeys: false,
 		  title: {
 			required: true
 		  },
 		  image: {
 			required: true
 		  },
+          clickUrl: {
+            required: true
+          },
 		  sponsoredBy: {
 			required: true
 		  }
@@ -30,7 +100,36 @@
 		bidder: 'adrelevantis',
 		params: {
 		  placementId: 13232354,
-		  allowSmallerSizes: true
+		  allowSmallerSizes: true,
+		  cpm: 0.9
+		}
+	  }]
+	},
+	{
+	  code: 'div-2',
+	  mediaTypes: {
+		native: {
+		  sendTargetingKeys: false,
+		  title: {
+			required: true
+		  },
+		  image: {
+			required: true
+		  },
+          clickUrl: {
+            required: true
+          },
+		  sponsoredBy: {
+			required: true
+		  }
+		}
+	  },
+	  bids: [{
+		bidder: 'adrelevantis',
+		params: {
+		  placementId: 13232354,
+		  allowSmallerSizes: true,
+		  cpm: 0.9
 		}
 	  }]
 	},
@@ -41,12 +140,16 @@
 	  ],
 	  mediaTypes: {
 		native: {
+		  sendTargetingKeys: false,
 		  title: {
 			required: true
 		  },
 		  image: {
 			required: true
 		  },
+          clickUrl: {
+            required: true
+          },
 		  sponsoredBy: {
 			required: true
 		  }
@@ -56,23 +159,25 @@
 		bidder: 'adrelevantis',
 		params: {
 		  placementId: 13232354,
-		  allowSmallerSizes: true
+		  allowSmallerSizes: true,
+		  cpm: 0.9
 		}
 	  }]
 	},
 	{
-	  code: 'div-2',
-	  sizes: [
-		[300, 300]
-	  ],
+	  code: 'div-4',
 	  mediaTypes: {
 		native: {
+		  sendTargetingKeys: false,
 		  title: {
 			required: true
 		  },
 		  image: {
 			required: true
 		  },
+          clickUrl: {
+            required: true
+          },
 		  sponsoredBy: {
 			required: true
 		  }
@@ -82,7 +187,8 @@
 		bidder: 'adrelevantis',
 		params: {
 		  placementId: 13232354,
-		  allowSmallerSizes: true
+		  allowSmallerSizes: true,
+		  cpm: 0.9
 		}
 	  }]
 	},
@@ -106,19 +212,44 @@
 				placementId: 13144370
 			}
 		}]
-	}
-];
-var googletag = googletag || {};
-googletag.cmd = googletag.cmd || [];
-googletag.cmd.push(function() {
-	googletag.pubads().disableInitialLoad();
-});
-var pbjs = pbjs || {};
-pbjs.que = pbjs.que || [];
+	}];
+	
+	googletag.cmd.push(function() {
+	  var slot1 = googletag.defineSlot('/21901351985/native_horizontal', 'fluid', 'div-1').addService(googletag.pubads());
+	  var slot1 = googletag.defineSlot('/21901351985/native_vertical', 'fluid', 'div-2').addService(googletag.pubads());
+	  var slot1 = googletag.defineSlot('/21901351985/native_square', 'fluid', 'div-3').addService(googletag.pubads());
+	  var slot1 = googletag.defineSlot('/21901351985/native_nature', 'fluid', 'div-4').addService(googletag.pubads());
+	  var slot2 = googletag.defineSlot('/21901351985/header-bid-tag-0', [[728, 90]], '/21901351985/header-bid-tag-0').addService(googletag.pubads());
+	  googletag.pubads().disableInitialLoad();
+	  googletag.pubads().enableSingleRequest();
+	  googletag.enableServices();
+	});
 
-var adDivIds = ['div-4','div-3','div-2','/21901351985/header-bid-tag-0'];
-document.addEventListener("DOMContentLoaded", function(event){ adrtags(adUnits, adDivIds); });
-		</script>
+    pbjs.addAdUnits(adUnits);
+    pbjs.requestBids({
+      bidsBackHandler: initAdserver,
+      timeout: PREBID_TIMEOUT
+    });
+  });
+
+  function initAdserver(bids) {
+    if (pbjs.initAdserverSet) return;
+    
+	googletag.cmd.push(function() {
+      pbjs.que.push(function() {
+        pbjs.setTargetingForGPTAsync();
+        googletag.pubads().refresh();
+      });
+    });
+	
+    pbjs.initAdserverSet = true;
+  }
+  
+  setTimeout(function(bids) {
+    initAdserver(bids);
+  }, FAILSAFE_TIMEOUT);
+};
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="profile" href="http://gmpg.org/xfn/11">
@@ -429,7 +560,7 @@ htlbid.setTargeting('is_testing', 'no');
 		<h2 class="screen-reader-text">Post navigation</h2>
 		<div class="nav-links"><div class="nav-previous"><a href="https://smittenkitchen.com/2019/03/extra-billowy-dutch-baby-pancake/" rel="prev"><svg class="smittenkitchen-icon smittenkitchen-icon-arrow"><use xlink:href="https://smittenkitchen.com/wp-content/themes/vip/smitten-kitchen/assets/svg/icons.svg#arrow" /></svg><span class="screen-reader-text">Previous post: extra-billowy dutch baby&nbsp;pancake</span> </a></div><div class="nav-next"><a href="https://smittenkitchen.com/2019/04/cannellini-aglio-e-olio/" rel="next"><svg class="smittenkitchen-icon smittenkitchen-icon-arrow"><use xlink:href="https://smittenkitchen.com/wp-content/themes/vip/smitten-kitchen/assets/svg/icons.svg#arrow" /></svg><span class="screen-reader-text">Next post: cannellini aglio e&nbsp;olio</span></a></div></div>
 	</nav><span class="smittenkitchen-primary-category">Recipes</span>		</div>
-
+<div id="div-4" />
 		<h1 class="entry-title"><a href="https://smittenkitchen.com/2019/03/essential-french-onion-soup/" rel="bookmark">essential french onion&nbsp;soup</a></h1>
 		<div class="entry-meta">
 			<span class="posted-on"><time class="entry-date published" datetime="2019-03-28T14:02:14-05:00">March 28, 2019</time><time class="updated" datetime="2019-04-02T14:51:09-05:00">April 2, 2019</time></span><span class="byline"> by <span class="author vcard"><a class="url fn n" href="https://smittenkitchen.com/author/debsk/">deb</a></span></span>
@@ -442,7 +573,6 @@ htlbid.setTargeting('is_testing', 'no');
 	</header><!-- .entry-header -->
 
 	<div class="entry-content">
-		
 	<div class="smittenkitchen-print-hide">
 		<p><em>[Welcome to the final installment of ✨ <em><strong>Newer, Better Month</strong></em> ✨ on Smitten Kitchen, when I update a few SK classics with new knowledge, new techniques, and with real-life time constraints in mind. Previously: <a href="https://smittenkitchen.com/2019/03/perfect-meatballs-and-spaghetti/">Perfect Spaghetti and Meatballs</a>, <a href="https://smittenkitchen.com/2019/03/extra-flaky-pie-crust/">Extra-Flaky Pie Crust</a>, and <a href="https://smittenkitchen.com/2019/03/extra-billowy-dutch-baby-pancake/">Extra-Billowy Dutch Baby Pancake</a>.]</em></p>
 <p>French onion soup is not just a forever favorite of mine, it&#8217;s &#8212; along with the other recipes I updated this month &#8212; what I consider a core recipe in my arsenal because it aligns with so much that I think is important in cooking. It&#8217;s totally budget-friendly (and downright cheap) to make. It&#8217;s made from buy-anywhere ingredients and very few of them &#8212; 99% of the flavor comes from just onions, cooked very slowly, transformed by a technique you need no advanced cooking skills to master. And it has a depth of flavor that is unparalleled in almost anything else I know how to make. </p>
@@ -3155,7 +3285,7 @@ htlbid.setTargeting('is_testing', 'no');
 						</a>
 												</div>
 					</div>
-        <div id='div-4'>
+        <div id='div-1'>
         </div>
 </aside>
 <aside id="media_image-28" class="widget widget_media_image"><h1 class="widget-title">THE SMITTEN KITCHEN COOKBOOKS</h1><style>.widget.widget_media_image { overflow: hidden; }.widget.widget_media_image img { height: auto; max-width: 100%; }</style><a href="https://smittenkitchen.com/books/"><img width="300" height="342" src="https://i1.wp.com/smittenkitchen.com/wp-content/uploads/2017/05/smitten-kitchen-every-day-final-cover.jpg?w=300" class="image wp-image-31939 aligncenter attachment-300x2738 size-300x2738" alt="Out in October: Smitten Kitchen Every Day" style="max-width: 100%; height: auto;" title="Out in October: Smitten Kitchen Every Day" srcset="https://i1.wp.com/smittenkitchen.com/wp-content/uploads/2017/05/smitten-kitchen-every-day-final-cover.jpg?w=300 300w, https://i1.wp.com/smittenkitchen.com/wp-content/uploads/2017/05/smitten-kitchen-every-day-final-cover.jpg?w=600 600w, https://i1.wp.com/smittenkitchen.com/wp-content/uploads/2017/05/smitten-kitchen-every-day-final-cover.jpg?w=131 131w, https://i1.wp.com/smittenkitchen.com/wp-content/uploads/2017/05/smitten-kitchen-every-day-final-cover.jpg?w=263 263w" sizes="(max-width: 300px) 100vw, 300px" data-attachment-id="31939" data-permalink="https://smittenkitchen.com/books/smitten-kitchen-every-day-final-cover/" data-orig-file="https://i1.wp.com/smittenkitchen.com/wp-content/uploads/2017/05/smitten-kitchen-every-day-final-cover.jpg" data-orig-size="2400,2738" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="smitten kitchen every day final cover" data-image-description="" data-medium-file="https://i1.wp.com/smittenkitchen.com/wp-content/uploads/2017/05/smitten-kitchen-every-day-final-cover.jpg?w=263" data-large-file="https://i1.wp.com/smittenkitchen.com/wp-content/uploads/2017/05/smitten-kitchen-every-day-final-cover.jpg?w=640" /></a>

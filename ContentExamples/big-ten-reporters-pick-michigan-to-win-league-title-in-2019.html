@@ -46,24 +46,91 @@
 	
   <script async src="//www.googletagservices.com/tag/js/gpt.js"></script>
   <script async src="//www.adrelevantis.com/pub/prebid.js"></script>
-  <script src="//www.adrelevantis.com/pub/contentdriventag.js"></script>
-  <!--script async src="../../../build/dev/prebid.js"></script>
-  <script src="/integrationExamples/gpt/contentdriventag.js"></script-->
-  <script>
+<script>
+//Content-Driven Advertising refers to individual pages
+//Set referrer to no-referrer-when-downgrade to ensure safety while providing page path
+if (document.querySelector('meta[name="referrer"]') === null){
+  var meta = document.createElement('meta');
+  meta.name = "referrer";
+  meta.content = "no-referrer-when-downgrade";
+  document.getElementsByTagName('head')[0].appendChild(meta);
+}
+else {
+  document.querySelector('meta[name="referrer"]').content = "no-referrer-when-downgrade";
+}
+
+//Content-Driven Advertising needs content accessible. So, wait DOMContentLoaded event to start the process
+document.addEventListener("DOMContentLoaded", function(event){ adrtags(); });
+
+var googletag = googletag || {};
+googletag.cmd = googletag.cmd || [];
+
+var PREBID_TIMEOUT = 3000;
+var FAILSAFE_TIMEOUT = 6000;
+
+var pbjs = pbjs || {};
+pbjs.que = pbjs.que || [];
+
+//Parse content, then, start bid process
+function adrtags() {
+  var q = document.getElementsByTagName('body')[0].innerText;
+  
+  var pload = 'q=' + encodeURIComponent(q);
+  var h = new XMLHttpRequest();
+  h.onreadystatechange = function () {
+    if (4 === this.readyState) {
+      if (200 === this.status) {
+        var res = JSON.parse(this.responseText);
+        if (res != null){
+		  adrads(res)
+		}
+      }
+    }
+  };
+  h.open("POST", "https://api.adrelevantis.com/getcatskeywords", true);
+  h.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  h.send(pload)
+} 
+  
+//Keywords and IAB Categories of the content are sent as bidder parameters
+function adrads(res)
+{
+  var cats = res["Category"];
+  var keywrds = [];
+  res["Keyword"].split("|").forEach((itm) => {
+	keywrds.push(itm);
+  })
+  
+  pbjs.que.push(function() {
+    pbjs.setBidderConfig({
+      bidders: ['adrelevantis'],
+      config: {
+        ortb2: {
+          site: {
+            keywords: keywrds.join(','),
+            ext: {
+			  data: {category: cats}
+			}
+          }
+        }
+      }
+    });
+
 	var adUnits = [
 	{
-	  code: 'div-4',
-	  sizes: [
-		[300, 300]
-	  ],
+	  code: 'div-1',
 	  mediaTypes: {
 		native: {
+		  sendTargetingKeys: false,
 		  title: {
 			required: true
 		  },
 		  image: {
 			required: true
 		  },
+          clickUrl: {
+            required: true
+          },
 		  sponsoredBy: {
 			required: true
 		  }
@@ -74,50 +141,24 @@
 		params: {
 		  placementId: 13232354,
 		  allowSmallerSizes: true,
-		  cpm: 5
-		}
-	  }]
-	},
-	{
-	  code: 'div-3',
-	  sizes: [
-		[300, 300]
-	  ],
-	  mediaTypes: {
-		native: {
-		  title: {
-			required: true
-		  },
-		  image: {
-			required: true
-		  },
-		  sponsoredBy: {
-			required: true
-		  }
-		}
-	  },
-	  bids: [{
-		bidder: 'adrelevantis',
-		params: {
-		  placementId: 13232354,
-		  allowSmallerSizes: true,
-		  cpm: 5
+		  cpm: 0.9
 		}
 	  }]
 	},
 	{
 	  code: 'div-2',
-	  sizes: [
-		[300, 300]
-	  ],
 	  mediaTypes: {
 		native: {
+		  sendTargetingKeys: false,
 		  title: {
 			required: true
 		  },
 		  image: {
 			required: true
 		  },
+          clickUrl: {
+            required: true
+          },
 		  sponsoredBy: {
 			required: true
 		  }
@@ -128,7 +169,63 @@
 		params: {
 		  placementId: 13232354,
 		  allowSmallerSizes: true,
-		  cpm: 5
+		  cpm: 0.9
+		}
+	  }]
+	},
+	{
+	  code: 'div-3',
+	  mediaTypes: {
+		native: {
+		  sendTargetingKeys: false,
+		  title: {
+			required: true
+		  },
+		  image: {
+			required: true
+		  },
+          clickUrl: {
+            required: true
+          },
+		  sponsoredBy: {
+			required: true
+		  }
+		}
+	  },
+	  bids: [{
+		bidder: 'adrelevantis',
+		params: {
+		  placementId: 13232354,
+		  allowSmallerSizes: true,
+		  cpm: 0.9
+		}
+	  }]
+	},
+	{
+	  code: 'div-4',
+	  mediaTypes: {
+		native: {
+		  sendTargetingKeys: false,
+		  title: {
+			required: true
+		  },
+		  image: {
+			required: true
+		  },
+          clickUrl: {
+            required: true
+          },
+		  sponsoredBy: {
+			required: true
+		  }
+		}
+	  },
+	  bids: [{
+		bidder: 'adrelevantis',
+		params: {
+		  placementId: 13232354,
+		  allowSmallerSizes: true,
+		  cpm: 0.9
 		}
 	  }]
 	},
@@ -146,19 +243,44 @@
 		  cpm: 0.50
 		}
 	  }]
-	}
-];
-var googletag = googletag || {};
-googletag.cmd = googletag.cmd || [];
-googletag.cmd.push(function() {
-	googletag.pubads().disableInitialLoad();
-});
-var pbjs = pbjs || {};
-pbjs.que = pbjs.que || [];
+	}];
+	
+	googletag.cmd.push(function() {
+	  var slot1 = googletag.defineSlot('/21901351985/native_horizontal', 'fluid', 'div-1').addService(googletag.pubads());
+	  var slot1 = googletag.defineSlot('/21901351985/native_vertical', 'fluid', 'div-2').addService(googletag.pubads());
+	  var slot1 = googletag.defineSlot('/21901351985/native_square', 'fluid', 'div-3').addService(googletag.pubads());
+	  var slot1 = googletag.defineSlot('/21901351985/native_nature', 'fluid', 'div-4').addService(googletag.pubads());
+	  var slot2 = googletag.defineSlot('/21901351985/header-bid-tag-0', [[728, 90]], '/21901351985/header-bid-tag-0').addService(googletag.pubads());
+	  googletag.pubads().disableInitialLoad();
+	  googletag.pubads().enableSingleRequest();
+	  googletag.enableServices();
+	});
 
-var adDivIds = ['div-4','div-3','div-2','/21901351985/header-bid-tag-0'];
-document.addEventListener("DOMContentLoaded", function(event){ adrtags(adUnits, adDivIds); });
-		</script>
+    pbjs.addAdUnits(adUnits);
+    pbjs.requestBids({
+      bidsBackHandler: initAdserver,
+      timeout: PREBID_TIMEOUT
+    });
+  });
+
+  function initAdserver(bids) {
+    if (pbjs.initAdserverSet) return;
+    
+	googletag.cmd.push(function() {
+      pbjs.que.push(function() {
+        pbjs.setTargetingForGPTAsync();
+        googletag.pubads().refresh();
+      });
+    });
+	
+    pbjs.initAdserverSet = true;
+  }
+  
+  setTimeout(function(bids) {
+    initAdserver(bids);
+  }, FAILSAFE_TIMEOUT);
+};
+</script>
 	</head>
 	
 	<body class="body__mlive page-type__article" data-affiliate="mlive" data-page-type="article"><div id="fusion-app"><div class="skipTo"><a class="skipTo__link" href="#main">Skip to Article</a></div><div class="toprail" id="sticky-nav"><div><script>window.adiData = {"affiliate":"mlive","entryUrl":"https://www.mlive.com/wolverines/2019/07/big-ten-reporters-pick-michigan-to-win-league-title-in-2019.html","environment":"prod","pageType":"cal","rgProduct":"cal","preview":false,"siteSection":"Sports","toprailEcr":false,"entryTags":"@mlive-river;@aa-river;michigan-football;@wolverines","entryId":"arc-EOC3JFQDRZHKPKISBZDWHU3OGA","blogName":"Wolverines","blogId":"wolverines","entryHeadline":"Big Ten reporters pick Michigan to win league title in 2019","entryDescription":"The annual preseason poll was conducted by Cleveland.com and includes the results from 34 respondents.","entryAuthorUsername":"amcmann1","entryDateOriginal":"2019-07-17T12:45:29.511Z","entryDateUpdated":"2019-07-17T13:31:40.093Z","arcEntryId":"EOC3JFQDRZHKPKISBZDWHU3OGA","aux":"","topics":"College Sports","entities":"person|Don Brown,organization|Cleveland.com,organization|Cornhuskers,organization|College Football Playoff,organization|Buckeyes,organization|Wolverines,organization|Rutgers,organization|Purdue,organization|Michigan State,organization|Penn State,organization|Ohio State,location|Nebraska,location|West,location|Indianapolis,location|Illinois,location|Iowa,location|Indiana,location|Wisconsin,location|Michigan,location|Minnesota,location|Chicago,location|Maryland,organization|Athlon Sports,person|Phil Steele,location|Big Ten East Division","entryDepth":"1"};
@@ -199,14 +321,13 @@ if (cdpbyadr.loadOnce == undefined) {
 }
 </script-->
 <div id='/21901351985/header-bid-tag-0'>
-            <script type='text/javascript'>
-                googletag.cmd.push(function() {
-                    googletag.display('/21901351985/header-bid-tag-0');
-                });
-            </script>
 </div>
 <a href="https://amzn.to/2LEekOS" style="font-size:16px;font-weight: bold;">Amazon Shop</a><br><br>	
-		
+		<div id='div-1' style="width: 60%;">
+        </div><br>	
+        <div id='div-4'>
+        </div>
+
 		<article id="arc-EOC3JFQDRZHKPKISBZDWHU3OGA" class="article h-entry" data-type="article"><header class="article__header"><header class="article__header"><nav class="articleLabel" aria-la
 		el="articleLabel"><ol id="articleLabel__list" class="articleLabel__list"><li id="articleLabel__listItem" class="articleLabel__listItem"><a id="articleLabel__link" class="articleLabel__link" href="/wolverines" title="Navigate to Wolverines">Wolverines</a></li></ol></nav><h1 class="headline-basic">Big Ten reporters pick Michigan to win league title in 2019</h1><div class="dateline"><span class="dateline__updated">Updated Jul 17, 2019; </span><span class="dateline__published">Posted Jul 17, 2019 </span></div></header><figure class="article__image"><div class="article__image-wrapper"><a class="article__image-link"><img class="article__image-content" srcSet="https://www.mlive.com/resizer/8Ect-yujy8X86pCSSOkvXwZT64w=/325x0/smart/arc-anglerfish-arc2-prod-advancelocal.s3.amazonaws.com/public/N7KKXINSUBBCVCCGABCW2P2GRU.JPG 325w, https://www.mlive.com/resizer/oRKxREbxC2ZSFTOkjAJ5Z63Na8A=/700x0/smart/arc-anglerfish-arc2-prod-advancelocal.s3.amazonaws.com/public/N7KKXINSUBBCVCCGABCW2P2GRU.JPG 700w" src="https://www.mlive.com/resizer/8Ect-yujy8X86pCSSOkvXwZT64w=/325x0/smart/arc-anglerfish-arc2-prod-advancelocal.s3.amazonaws.com/public/N7KKXINSUBBCVCCGABCW2P2GRU.JPG" alt="College football: Michigan State vs. Michigan - October 20, 2018" sizes="(min-width: 761px) 700px, (min-width: 360px) 600px, 325px"/></a><figcaption class="article__image-caption"><p class="article__mm-image-credit">Mike Mulholland | MLive.com</p><p class="article__mm-image-caption-text">Michigan coach Jim Harbaugh talks with quarterback Shea Patterson (2) during the fourth quarter of their Big Ten football game against Michigan State at Spartan Stadium in East Lansing on Saturday, October 20, 2018. Michigan won the game, 21-7. (Mike Mulholland | MLive.com) Mike Mulholland | MLive.com</p></figcaption></div></figure><div class="article__commentBubble-socialShare" id="social_EOC3JFQDRZHKPKISBZDWHU3OGA_gig_containerParent"><div class="commentBubble__container"><button class="commentBubble commentBubble--noComments" data-path="https://www.mlive.com/wolverines/2019/07/big-ten-reporters-pick-michigan-to-win-league-title-in-2019.html" data-unique_id="EOC3JFQDRZHKPKISBZDWHU3OGA" aria-label="Read all comments on this articleElement"><span class="commentBubbleSpan" data-type="commentBubble"><span class="viafoura"><span class="vf-counter vf-widget" data-widget="counter" data-path="https://www.mlive.com/wolverines/2019/07/big-ten-reporters-pick-michigan-to-win-league-title-in-2019.html" data-unique_id="EOC3JFQDRZHKPKISBZDWHU3OGA"></span></span></span></button></div><div id="social_EOC3JFQDRZHKPKISBZDWHU3OGA" class="adi-share-auto" data-layout="horizontal" data-link="https://www.mlive.com/wolverines/2019/07/big-ten-reporters-pick-michigan-to-win-league-title-in-2019.html" data-title="Big Ten reporters pick Michigan to win league title in 2019"></div></div><div class="byline"><div>By <a
                         class="byline__authorLink"
@@ -217,11 +338,9 @@ if (cdpbyadr.loadOnce == undefined) {
 				   
 				   <div id="sidebar" class="sidebar">
 <br><br><br><br><br><br><br><br>
-        <div id='div-4'>
-        </div>
-        <div id='div-3'>
-        </div>
         <div id='div-2'>
+        </div><br>	
+        <div id='div-3'>
         </div>
 
 <!--div class="adr-ad300_250"><ins data-revive-zoneid="8" data-revive-promotion="3" data-revive-publisher="compariola" data-revive-promoter="PRODUCT" data-revive-id="8d00ec3e74b449269c484e2fbed6f23a"></ins>
