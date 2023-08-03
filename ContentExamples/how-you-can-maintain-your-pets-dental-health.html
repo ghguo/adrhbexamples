@@ -458,32 +458,23 @@ data-styled.g16[id="sc-dkzDqf"]{content:"hfoPIb,kNBjBp,gifzuh,hPIKxt,dwXpQH,XWiP
 <script async src="//www.googletagservices.com/tag/js/gpt.js"></script>
 <script async src="//www.adrelevantis.com/pub/prebid.js"></script>
 <script>
-//Content-Driven Advertising refers to individual pages
-//Set referrer to no-referrer-when-downgrade to ensure safety while providing page path
-if (document.querySelector('meta[name="referrer"]') === null){
-  var meta = document.createElement('meta');
-  meta.name = "referrer";
-  meta.content = "no-referrer-when-downgrade";
-  document.getElementsByTagName('head')[0].appendChild(meta);
-}
-else {
-  document.querySelector('meta[name="referrer"]').content = "no-referrer-when-downgrade";
-}
-
-//Content-Driven Advertising needs content accessible. So, wait DOMContentLoaded event to start the process
-document.addEventListener("DOMContentLoaded", function(event){ adrtags(); });
-
-var googletag = googletag || {};
-googletag.cmd = googletag.cmd || [];
-
-var PREBID_TIMEOUT = 3000;
-var FAILSAFE_TIMEOUT = 6000;
-
-var pbjs = pbjs || {};
-pbjs.que = pbjs.que || [];
+//Content-Driven Advertising needs access to content. So, wait DOMContentLoaded event to start the bid process
+document.addEventListener("DOMContentLoaded", function(event){ contentRelevantAds(); });
 
 //Parse content, then, start bid process
-function adrtags() {
+function contentRelevantAds() {
+  //Content-Driven Advertising refers to individual pages
+  //Set referrer to no-referrer-when-downgrade to ensure safety while providing page path
+  if (document.querySelector('meta[name="referrer"]') === null){
+	var meta = document.createElement('meta');
+	meta.name = "referrer";
+	meta.content = "no-referrer-when-downgrade";
+	document.getElementsByTagName('head')[0].appendChild(meta);
+  }
+  else {
+	document.querySelector('meta[name="referrer"]').content = "no-referrer-when-downgrade";
+  }
+  
   var q = document.getElementsByTagName('body')[0].innerText;
   
   var pload = 'q=' + encodeURIComponent(q);
@@ -493,7 +484,13 @@ function adrtags() {
       if (200 === this.status) {
         var res = JSON.parse(this.responseText);
         if (res != null){
-		  adrads(res)
+		  var cats = res["Category"];
+		  var keywrds = [];
+		  res["Keyword"].split("|").forEach((itm) => {
+			keywrds.push(itm);
+		  });
+  
+		  bidFunc(keywrds, cats)
 		}
       }
     }
@@ -502,16 +499,20 @@ function adrtags() {
   h.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   h.send(pload)
 } 
-  
-//Keywords and IAB Categories of the content are sent as bidder parameters
-function adrads(res)
+
+//Prebid.js and Google Ad Manager code below this point.  
+var googletag = googletag || {};
+googletag.cmd = googletag.cmd || [];
+
+var PREBID_TIMEOUT = 3000;
+var FAILSAFE_TIMEOUT = 6000;
+
+var pbjs = pbjs || {};
+pbjs.que = pbjs.que || [];
+
+function bidFunc(keywrds, cats)
 {
-  var cats = res["Category"];
-  var keywrds = [];
-  res["Keyword"].split("|").forEach((itm) => {
-	keywrds.push(itm);
-  })
-  
+  //Keywords and IAB Categories of the content are sent as bidder parameters
   pbjs.que.push(function() {
     pbjs.setBidderConfig({
       bidders: ['adrelevantis'],
