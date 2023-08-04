@@ -44,52 +44,10 @@
 	
 	<link rel="preconnect" href="https://adservice.google.com"/><link rel="preconnect" href="https://cdns.us1.gigya.com"/><link rel="preconnect" href="https://as.jivox.com"/><link rel="preconnect" href="https://js-sec.indexww.com"/><link rel="preconnect" href="https://c.amazon-adsystem.com"/><link rel="preconnect" href="https://www.google.com"/><link rel="preconnect" href="https://cdn.taboola.com"/><link rel="preconnect" href="https://securepubads.g.doubleclick.net"/><link rel="preconnect" href="https://as-sec.casalemedia.com"/><link rel="preconnect" href="https://aax.amazon-adsystem.com"/><link rel="preconnect" href="https://fastlane.rubiconproject.com"/><link rel="preconnect" href="https://fonts.advance.net"/>
 	
-  <script async src="//www.googletagservices.com/tag/js/gpt.js"></script>
-  <script async src="//www.adrelevantis.com/pub/prebid.js"></script>
+<script async src="//www.googletagservices.com/tag/js/gpt.js"></script>
+<script async src="//www.adrelevantis.com/pub/prebid.js"></script>
 <script>
-//Content-Driven Advertising needs access to content. So, wait DOMContentLoaded event to start the bid process
-document.addEventListener("DOMContentLoaded", function(event){ contentRelevantAds(); });
-
-//Parse content, then, start bid process
-function contentRelevantAds() {
-  //Content-Driven Advertising refers to individual pages
-  //Set referrer to no-referrer-when-downgrade to ensure safety while providing page path
-  if (document.querySelector('meta[name="referrer"]') === null){
-	var meta = document.createElement('meta');
-	meta.name = "referrer";
-	meta.content = "no-referrer-when-downgrade";
-	document.getElementsByTagName('head')[0].appendChild(meta);
-  }
-  else {
-	document.querySelector('meta[name="referrer"]').content = "no-referrer-when-downgrade";
-  }
-  
-  var q = document.getElementsByTagName('body')[0].innerText;
-  
-  var pload = 'q=' + encodeURIComponent(q);
-  var h = new XMLHttpRequest();
-  h.onreadystatechange = function () {
-    if (4 === this.readyState) {
-      if (200 === this.status) {
-        var res = JSON.parse(this.responseText);
-        if (res != null){
-		  var cats = res["Category"];
-		  var keywrds = [];
-		  res["Keyword"].split("|").forEach((itm) => {
-			keywrds.push(itm);
-		  });
-  
-		  bidFunc(keywrds, cats)
-		}
-      }
-    }
-  };
-  h.open("POST", "https://api.adrelevantis.com/getcatskeywords", true);
-  h.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-  h.send(pload)
-} 
-
-//Prebid.js and Google Ad Manager code below this point.  
+//Prebid.js and Google Ad Manager code
 var googletag = googletag || {};
 googletag.cmd = googletag.cmd || [];
 
@@ -281,6 +239,45 @@ function bidFunc(keywrds, cats)
     initAdserver(bids);
   }, FAILSAFE_TIMEOUT);
 };
+
+//Content-Driven Advertising needs access to content. So, wait DOMContentLoaded event to start the bid process
+document.addEventListener("DOMContentLoaded", function(event){   
+  //Content-Driven Advertising refers to individual pages
+  //Set referrer to no-referrer-when-downgrade to ensure safety while providing page path
+  if (document.querySelector('meta[name="referrer"]') === null){
+	var meta = document.createElement('meta');
+	meta.name = "referrer";
+	meta.content = "no-referrer-when-downgrade";
+	document.getElementsByTagName('head')[0].appendChild(meta);
+  }
+  else {
+	document.querySelector('meta[name="referrer"]').content = "no-referrer-when-downgrade";
+  }
+  
+  var q = document.getElementsByTagName('body')[0].innerText;
+  
+  var pload = 'q=' + encodeURIComponent(q);
+  var h = new XMLHttpRequest();
+  h.onreadystatechange = function () {
+    if (4 === this.readyState) {
+      if (200 === this.status) {
+        var res = JSON.parse(this.responseText);
+        if (res != null){
+		  var cats = res["Category"];
+		  var keywrds = [];
+		  res["Keyword"].split("|").forEach((itm) => {
+			keywrds.push(itm);
+		  });
+  
+		  bidFunc(keywrds, cats)
+		}
+      }
+    }
+  };
+  h.open("POST", "https://api.adrelevantis.com/getcatskeywords", true);
+  h.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  h.send(pload)
+});
 </script>
 	</head>
 	
