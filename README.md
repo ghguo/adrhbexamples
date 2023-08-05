@@ -32,152 +32,152 @@ function bidFunc(keywrds, cats)
           site: {
             keywords: keywrds,
             ext: {
-			  data: {category: cats}
-			}
+              data: {category: cats}
+            }
           }
         }
       }
     });
 
-	var adUnits = [
-	{
-	  code: 'div-1',
-	  mediaTypes: {
-		native: {
-		  sendTargetingKeys: false,
-		  title: {
-			required: true
-		  },
-		  image: {
-			required: true
-		  },
+    var adUnits = [
+    {
+      code: 'div-1',
+      mediaTypes: {
+        native: {
+          sendTargetingKeys: false,
+          title: {
+          required: true
+          },
+          image: {
+            required: true
+          },
           clickUrl: {
             required: true
           },
-		  sponsoredBy: {
-			required: true
-		  }
-		}
-	  },
-	  bids: [{
-		bidder: 'adrelevantis',
-		params: {
-		  placementId: 13232354,
-		  allowSmallerSizes: true,
-		  cpm: 0.9
-		}
-	  }]
-	},
-	{
-	  code: 'div-2',
-	  mediaTypes: {
-		native: {
-		  sendTargetingKeys: false,
-		  title: {
-			required: true
-		  },
-		  image: {
-			required: true
-		  },
+          sponsoredBy: {
+            required: true
+          }
+        }
+      },
+      bids: [{
+        bidder: 'adrelevantis',
+        params: {
+          placementId: 13232354,
+          allowSmallerSizes: true,
+          cpm: 0.9
+        }
+      }]
+    },
+    {
+      code: 'div-2',
+      mediaTypes: {
+        native: {
+          sendTargetingKeys: false,
+          title: {
+            required: true
+          },
+          image: {
+            required: true
+          },
           clickUrl: {
             required: true
           },
-		  sponsoredBy: {
-			required: true
-		  }
-		}
-	  },
-	  bids: [{
-		bidder: 'adrelevantis',
-		params: {
-		  placementId: 13232354,
-		  allowSmallerSizes: true,
-		  cpm: 0.9
-		}
-	  }]
-	},
-	{
-	  code: 'div-3',
-	  mediaTypes: {
-		native: {
-		  sendTargetingKeys: false,
-		  title: {
-			required: true
-		  },
-		  image: {
-			required: true
-		  },
+          sponsoredBy: {
+            required: true
+          }
+        }
+      },
+      bids: [{
+        bidder: 'adrelevantis',
+        params: {
+          placementId: 13232354,
+          allowSmallerSizes: true,
+          cpm: 0.9
+        }
+      }]
+    },
+    {
+      code: 'div-3',
+      mediaTypes: {
+        native: {
+          sendTargetingKeys: false,
+          title: {
+            required: true
+          },
+          image: {
+            required: true
+          },
           clickUrl: {
             required: true
           },
-		  sponsoredBy: {
-			required: true
-		  }
-		}
-	  },
-	  bids: [{
-		bidder: 'adrelevantis',
-		params: {
-		  placementId: 13232354,
-		  allowSmallerSizes: true,
-		  cpm: 0.9
-		}
-	  }]
-	},
-	{
-	  code: 'div-4',
-	  mediaTypes: {
-		native: {
-		  sendTargetingKeys: false,
-		  title: {
-			required: true
-		  },
-		  image: {
-			required: true
-		  },
+          sponsoredBy: {
+            required: true
+          }
+        }
+      },
+      bids: [{
+        bidder: 'adrelevantis',
+        params: {
+          placementId: 13232354,
+          allowSmallerSizes: true,
+          cpm: 0.9
+        }
+      }]
+    },
+    {
+      code: 'div-4',
+      mediaTypes: {
+        native: {
+          sendTargetingKeys: false,
+          title: {
+            required: true
+          },
+          image: {
+            required: true
+          },
           clickUrl: {
             required: true
           },
-		  sponsoredBy: {
-			required: true
-		  }
-		}
-	  },
-	  bids: [{
-		bidder: 'adrelevantis',
-		params: {
-		  placementId: 13232354,
-		  allowSmallerSizes: true,
-		  cpm: 0.9
-		}
-	  }]
-	},
-	{
-	  code: '/21901351985/header-bid-tag-0',
-	  mediaTypes: {
-		banner: {
-		  sizes: [[728, 90]]
-		}
-	  },
-	  bids: [{
-		bidder: 'adrelevantis',
-		params: {
-		  placementId: 13144370,
-		  cpm: 0.50
-		}
-	  }]
-	}];
-	
-	googletag.cmd.push(function() {
-	  var slot1 = googletag.defineSlot('/21901351985/native_horizontal', 'fluid', 'div-1').addService(googletag.pubads());
-	  var slot1 = googletag.defineSlot('/21901351985/native_vertical', 'fluid', 'div-2').addService(googletag.pubads());
-	  var slot1 = googletag.defineSlot('/21901351985/native_square', 'fluid', 'div-3').addService(googletag.pubads());
-	  var slot1 = googletag.defineSlot('/21901351985/native_nature', 'fluid', 'div-4').addService(googletag.pubads());
-	  var slot2 = googletag.defineSlot('/21901351985/header-bid-tag-0', [[728, 90]], '/21901351985/header-bid-tag-0').addService(googletag.pubads());
-	  googletag.pubads().disableInitialLoad();
-	  googletag.pubads().enableSingleRequest();
-	  googletag.enableServices();
-	});
+          sponsoredBy: {
+            required: true
+          }
+        }
+      },
+      bids: [{
+        bidder: 'adrelevantis',
+        params: {
+          placementId: 13232354,
+          allowSmallerSizes: true,
+          cpm: 0.9
+        }
+      }]
+    },
+    {
+      code: '/21901351985/header-bid-tag-0',
+      mediaTypes: {
+        banner: {
+          sizes: [[728, 90]]
+        }
+      },
+      bids: [{
+        bidder: 'adrelevantis',
+        params: {
+          placementId: 13144370,
+          cpm: 0.50
+        }
+      }]
+    }];
+    
+    googletag.cmd.push(function() {
+      var slot1 = googletag.defineSlot('/21901351985/native_horizontal', 'fluid', 'div-1').addService(googletag.pubads());
+      var slot1 = googletag.defineSlot('/21901351985/native_vertical', 'fluid', 'div-2').addService(googletag.pubads());
+      var slot1 = googletag.defineSlot('/21901351985/native_square', 'fluid', 'div-3').addService(googletag.pubads());
+      var slot1 = googletag.defineSlot('/21901351985/native_nature', 'fluid', 'div-4').addService(googletag.pubads());
+      var slot2 = googletag.defineSlot('/21901351985/header-bid-tag-0', [[728, 90]], '/21901351985/header-bid-tag-0').addService(googletag.pubads());
+      googletag.pubads().disableInitialLoad();
+      googletag.pubads().enableSingleRequest();
+      googletag.enableServices();
+    });
 
     pbjs.addAdUnits(adUnits);
     pbjs.requestBids({
@@ -189,13 +189,13 @@ function bidFunc(keywrds, cats)
   function initAdserver(bids) {
     if (pbjs.initAdserverSet) return;
     
-	googletag.cmd.push(function() {
+    googletag.cmd.push(function() {
       pbjs.que.push(function() {
         pbjs.setTargetingForGPTAsync();
         googletag.pubads().refresh();
       });
     });
-	
+    
     pbjs.initAdserverSet = true;
   }
   
@@ -209,13 +209,13 @@ document.addEventListener("DOMContentLoaded", function(event){
   //Content-Driven Advertising refers to individual pages
   //Set referrer to no-referrer-when-downgrade to ensure safety while providing page path
   if (document.querySelector('meta[name="referrer"]') === null){
-	var meta = document.createElement('meta');
-	meta.name = "referrer";
-	meta.content = "no-referrer-when-downgrade";
-	document.getElementsByTagName('head')[0].appendChild(meta);
+    var meta = document.createElement('meta');
+    meta.name = "referrer";
+    meta.content = "no-referrer-when-downgrade";
+    document.getElementsByTagName('head')[0].appendChild(meta);
   }
   else {
-	document.querySelector('meta[name="referrer"]').content = "no-referrer-when-downgrade";
+    document.querySelector('meta[name="referrer"]').content = "no-referrer-when-downgrade";
   }
   
   var q = document.getElementsByTagName('body')[0].innerText;
@@ -227,10 +227,10 @@ document.addEventListener("DOMContentLoaded", function(event){
       if (200 === this.status) {
         var res = JSON.parse(this.responseText);
         if (res != null){
-		  var cats = res["Category"];
-		  var keywrds = res["Keyword"].replaceAll(/\|/g,",");
-		  bidFunc(keywrds, cats)
-		}
+          var cats = res["Category"];
+          var keywrds = res["Keyword"].replaceAll(/\|/g,",");
+          bidFunc(keywrds, cats)
+        }
       }
     }
   };
@@ -262,11 +262,11 @@ Put the above code in the page ```<head>``` section. And make sure your page has
 
 ```
 <div id='/21901351985/header-bid-tag-0'>
-	<script type='text/javascript'>
-		googletag.cmd.push(function() {
-			googletag.display('/21901351985/header-bid-tag-0');
-		});
-	</script>
+    <script type='text/javascript'>
+        googletag.cmd.push(function() {
+            googletag.display('/21901351985/header-bid-tag-0');
+        });
+    </script>
 </div>
 ```
 # Examples
