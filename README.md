@@ -1,13 +1,13 @@
 # Ads relevant to content with Adrelevantis bidder adapter
-[Adrelevantis bidder adapater](https://docs.prebid.org/dev-docs/bidders/adrelevantis.html) is the first adapter in prebid.js that sends content's IAB categories and content's ranked keywords from publisher side. 
+[Adrelevantis bidder adapater](https://docs.prebid.org/dev-docs/bidders/adrelevantis.html) sends keywords and IAB categories of page content, returns native ads relevant to the keywords and categories, and displays via Google Ad Manager tag. 
 
-Here, a few examples with various content types (Sports, Home and Garden, Entertainment and Cooking, etc) are given to demonstrate how to show ads relevant to page content using Adrelevantis bidder adapter. The following code extracts IAB Categories and ranked keywords of a page, sends the categories and keywords as part of bid request and displays ads.
-
-Drop the following code to your page to display ads relevant to the page content.
+Here is an example by providing keywords and IAB categories. You can change the keywords and IAB categories to see how relevant ads are displayed.
 
 # Code
 
 ```
+<html>
+<head>
 <script async src="//www.googletagservices.com/tag/js/gpt.js"></script>
 <script async src="//www.adrelevantis.com/pub/prebid.js"></script>
 <script>
@@ -64,7 +64,7 @@ function bidFunc(keywrds, cats)
         params: {
           placementId: 13232354,
           allowSmallerSizes: true,
-          cpm: 0.9
+          cpm: 1
         }
       }]
     },
@@ -92,7 +92,7 @@ function bidFunc(keywrds, cats)
         params: {
           placementId: 13232354,
           allowSmallerSizes: true,
-          cpm: 0.9
+          cpm: 1
         }
       }]
     },
@@ -120,7 +120,7 @@ function bidFunc(keywrds, cats)
         params: {
           placementId: 13232354,
           allowSmallerSizes: true,
-          cpm: 0.9
+          cpm: 1
         }
       }]
     },
@@ -148,32 +148,16 @@ function bidFunc(keywrds, cats)
         params: {
           placementId: 13232354,
           allowSmallerSizes: true,
-          cpm: 0.9
-        }
-      }]
-    },
-    {
-      code: '/21901351985/header-bid-tag-0',
-      mediaTypes: {
-        banner: {
-          sizes: [[728, 90]]
-        }
-      },
-      bids: [{
-        bidder: 'adrelevantis',
-        params: {
-          placementId: 13144370,
-          cpm: 0.50
+          cpm: 1
         }
       }]
     }];
     
     googletag.cmd.push(function() {
-      var slot1 = googletag.defineSlot('/21901351985/native_horizontal', 'fluid', 'div-1').addService(googletag.pubads());
-      var slot1 = googletag.defineSlot('/21901351985/native_vertical', 'fluid', 'div-2').addService(googletag.pubads());
-      var slot1 = googletag.defineSlot('/21901351985/native_square', 'fluid', 'div-3').addService(googletag.pubads());
-      var slot1 = googletag.defineSlot('/21901351985/native_nature', 'fluid', 'div-4').addService(googletag.pubads());
-      var slot2 = googletag.defineSlot('/21901351985/header-bid-tag-0', [[728, 90]], '/21901351985/header-bid-tag-0').addService(googletag.pubads());
+      var slot1 = googletag.defineSlot('/21901351985/native_nature', 'fluid', 'div-1').addService(googletag.pubads());
+      var slot1 = googletag.defineSlot('/21901351985/native_square', 'fluid', 'div-2').addService(googletag.pubads());
+      var slot1 = googletag.defineSlot('/21901351985/native_horizontal', 'fluid', 'div-3').addService(googletag.pubads());
+      var slot1 = googletag.defineSlot('/21901351985/native_vertical', 'fluid', 'div-4').addService(googletag.pubads());
       googletag.pubads().disableInitialLoad();
       googletag.pubads().enableSingleRequest();
       googletag.enableServices();
@@ -204,6 +188,26 @@ function bidFunc(keywrds, cats)
   }, FAILSAFE_TIMEOUT);
 };
 
+bidFunc("Pets Dental Health,Pet,Pet dental", "/pets|/pets/cats");
+</script>
+</head>
+  <body>
+    <h2>Native Content-Driven Advertising Examples</h2>
+    <div id='div-1'>
+    </div><br>
+    <div id='div-2' style="width: 30%">
+    </div><br>
+    <div id='div-3' style="width: 50%">
+    </div><br>
+    <div id='div-4' style="width: 25%">
+    </div><br>
+  </body>
+</html>
+```
+
+Or if your page has content, you can use an AI service that identifies keywords and IAB Categories of the page dynamically in real time, and then, provides them to the bid process. To do that, use the code below to replace the call bidFunc("Pets Dental Health,Pet,Pet dental", "/pets|/pets/cats") above.
+
+```
 //Content-Driven Advertising needs access to content. So, wait DOMContentLoaded event to start the bid process
 document.addEventListener("DOMContentLoaded", function(event){   
   //Content-Driven Advertising refers to individual pages
@@ -238,37 +242,8 @@ document.addEventListener("DOMContentLoaded", function(event){
   h.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   h.send(pload)
 });
-</script>
 ```
 
-Put the above code in the page ```<head>``` section. And make sure your page has the div tags mentioned in the code. For example, inside your page, there are div tags something like
-```
-<div id='div-4'>
-</div>
-```
-...
-
-```
-<div id='div-3'>
-</div>
-```
-...
-
-```
-<div id='div-2'>
-</div>
-```
-...
-
-```
-<div id='/21901351985/header-bid-tag-0'>
-    <script type='text/javascript'>
-        googletag.cmd.push(function() {
-            googletag.display('/21901351985/header-bid-tag-0');
-        });
-    </script>
-</div>
-```
 # Examples
 Here are a few content types (IAB Categories) in the /ContentExamples.
 
