@@ -1,5 +1,5 @@
 # Ads relevant to content with Adrelevantis bidder adapter
-[Adrelevantis bidder adapater](https://docs.prebid.org/dev-docs/bidders/adrelevantis.html) sends keywords and IAB categories of page content, returns native ads relevant to the keywords and categories, and displays via Google Ad Manager tag. 
+[Adrelevantis bidder adapater](https://docs.prebid.org/dev-docs/bidders/adrelevantis.html) sends keywords and IAB categories, returns native ads relevant to the keywords and categories, and displays via Google Ad Manager tag. 
 
 Here is an example by providing keywords and IAB categories. You can change the keywords and IAB categories to see how relevant ads are displayed.
 
@@ -205,7 +205,7 @@ bidFunc("Pets Dental Health,Pet,Pet dental", "/pets|/pets/cats");
 </html>
 ```
 
-Or if your page has content, you can use an AI service that identifies keywords and IAB Categories of the page dynamically in real time, and then, provides them to the bid process. To do that, use the code below to replace the call bidFunc("Pets Dental Health,Pet,Pet dental", "/pets|/pets/cats") above.
+If your page has content, you can use an AI service that identifies keywords and IAB Categories of the page automatically in real time, and then, provides them to the bid process. To do that, use the code below to replace the call bidFunc("Pets Dental Health,Pet,Pet dental", "/pets|/pets/cats") above.
 
 ```
 //Content-Driven Advertising needs access to content. So, wait DOMContentLoaded event to start the bid process
