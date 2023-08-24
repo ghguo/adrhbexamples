@@ -2,6 +2,7 @@
 <head>
 <script async src="//www.googletagservices.com/tag/js/gpt.js"></script>
 <script async src="//www.adrelevantis.com/pub/prebid.js"></script>
+<!--script async src="../../../build/dev/prebid.js"></script-->
 <script>
 //Prebid.js and Google Ad Manager code
 var googletag = googletag || {};
@@ -84,7 +85,7 @@ function bidFunc(keywrds, cats)
         params: {
           placementId: 13232354,
           allowSmallerSizes: true,
-          cpm: 1
+          cpm: 1.5
         }
       }]
     },
@@ -140,16 +141,49 @@ function bidFunc(keywrds, cats)
         params: {
           placementId: 13232354,
           allowSmallerSizes: true,
-          cpm: 1
+          cpm: 2
         }
       }]
-    }];
+    },
+	{
+	  code: 'div-5',
+	  mediaTypes: {
+		banner: {
+		  sizes: [[300, 600], [300, 250]]
+		},
+        native: {
+          sendTargetingKeys: false,
+          title: {
+            required: true
+          },
+          image: {
+            required: true
+          },
+          clickUrl: {
+            required: true
+          },
+          sponsoredBy: {
+            required: true
+          }
+        }
+	  },
+	  bids: [{
+		bidder: 'adrelevantis',
+		params: {
+		  placementId: 13144370,
+		  cpm: 1
+		}
+	  }]
+	}];
+
     
     googletag.cmd.push(function() {
-      var slot1 = googletag.defineSlot('/21901351985/native_nature', 'fluid', 'div-1').addService(googletag.pubads());
+      //var slot1 = googletag.defineSlot('/21901351985/native_nature', 'fluid', 'div-1').addService(googletag.pubads());
+      var slot1 = googletag.defineSlot('/21901351985/hb-native-0', ['fluid', [1, 1]], 'div-1').addService(googletag.pubads());
       var slot1 = googletag.defineSlot('/21901351985/native_square', 'fluid', 'div-2').addService(googletag.pubads());
       var slot1 = googletag.defineSlot('/21901351985/native_horizontal', 'fluid', 'div-3').addService(googletag.pubads());
       var slot1 = googletag.defineSlot('/21901351985/native_vertical', 'fluid', 'div-4').addService(googletag.pubads());
+      var slot1 = googletag.defineSlot('/21901351985/header-bid-tag-2', ['fluid', [300, 600], [300, 250]], 'div-5').addService(googletag.pubads());
       googletag.pubads().disableInitialLoad();
       googletag.pubads().enableSingleRequest();
       googletag.enableServices();
@@ -186,12 +220,20 @@ bidFunc("Pets Dental Health,Pet,Pet dental", "/pets|/pets/cats");
   <body>
     <h2>Native Content-Driven Advertising Examples</h2>
     <div id='div-1'>
-    </div><br>
+	<script>
+    googletag.cmd.push(function() { googletag.display('div-1'); });
+  </script>
+  </div><br>
     <div id='div-2' style="width: 30%">
     </div><br>
     <div id='div-3' style="width: 50%">
     </div><br>
     <div id='div-4' style="width: 25%">
     </div><br>
+	<div id='div-5' style='width: 30%; min-width: 300px; min-height: 250px;'>
+  <!--script>
+    googletag.cmd.push(function() { googletag.display('div-5'); });
+  </script-->
+</div>
   </body>
 </html>
