@@ -1,0 +1,110 @@
+<html>
+<head>
+<script async src="//www.googletagservices.com/tag/js/gpt.js"></script>
+<script async src="//www.adrelevantis.com/pub/prebid.js"></script>
+<script>
+//Prebid.js and Google Ad Manager code
+var googletag = googletag || {};
+googletag.cmd = googletag.cmd || [];
+
+var PREBID_TIMEOUT = 3000;
+var FAILSAFE_TIMEOUT = 6000;
+
+var pbjs = pbjs || {};
+pbjs.que = pbjs.que || [];
+
+function bidFunc(keywrds, cats)
+{
+  //Keywords and IAB Categories of the content are sent as bidder parameters
+  pbjs.que.push(function() {
+    pbjs.setBidderConfig({
+      bidders: ['adrelevantis'],
+      config: {
+        ortb2: {
+          site: {
+            keywords: keywrds,
+            ext: {
+              data: {category: cats}
+            }
+          }
+        }
+      }
+    });
+
+    var adUnits = [
+	{
+	  code: 'div-1',
+	  mediaTypes: {
+		banner: {
+		  sizes: [[300, 600], [300, 250]]
+		},
+        native: {
+          sendTargetingKeys: false,
+          title: {
+            required: true
+          },
+          image: {
+            required: true
+          },
+          clickUrl: {
+            required: true
+          },
+          sponsoredBy: {
+            required: true
+          }
+        }
+	  },
+	  bids: [{
+		bidder: 'adrelevantis',
+		params: {
+		  placementId: 13144370,
+		  cpm: 1
+		}
+	  }]
+	}];
+
+    
+    googletag.cmd.push(function() {
+      var slot1 = googletag.defineSlot('/21901351985/header-bid-tag-2', ['fluid', [300, 600], [300, 250]], 'div-1').addService(googletag.pubads());
+      googletag.pubads().disableInitialLoad();
+      googletag.pubads().enableSingleRequest();
+      googletag.enableServices();
+    });
+
+    pbjs.addAdUnits(adUnits);
+    pbjs.requestBids({
+      bidsBackHandler: initAdserver,
+      timeout: PREBID_TIMEOUT
+    });
+  });
+
+  function initAdserver(bids) {
+    if (pbjs.initAdserverSet) return;
+    
+    googletag.cmd.push(function() {
+      pbjs.que.push(function() {
+        pbjs.setTargetingForGPTAsync();
+        googletag.pubads().refresh();
+      });
+    });
+    
+    pbjs.initAdserverSet = true;
+  }
+  
+  setTimeout(function(bids) {
+    initAdserver(bids);
+  }, FAILSAFE_TIMEOUT);
+};
+
+bidFunc("Pets Dental Health,Pet,Pet dental", "/pets|/pets/cats");
+</script>
+</head>
+  <body>
+    <h2>Native Content-Driven Advertising Examples</h2>
+	<div id='div-1' style='width: 30%; min-width: 300px; min-height: 250px;'>
+	<script>
+    googletag.cmd.push(function() { googletag.display('div-1'); });
+	</script>
+	</div>
+  </body>
+</html>
