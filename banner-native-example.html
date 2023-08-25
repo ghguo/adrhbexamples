@@ -32,12 +32,12 @@ function bidFunc(keywrds, cats)
     });
 
     var adUnits = [
-	{
-	  code: 'div-1',
-	  mediaTypes: {
-		banner: {
-		  sizes: [[300, 600], [300, 250]]
-		},
+    {
+      code: 'div-1',
+      mediaTypes: {
+        banner: {
+          sizes: [[300, 600], [300, 250]]
+        },
         native: {
           sendTargetingKeys: false,
           title: {
@@ -53,15 +53,15 @@ function bidFunc(keywrds, cats)
             required: true
           }
         }
-	  },
-	  bids: [{
-		bidder: 'adrelevantis',
-		params: {
-		  placementId: 13144370,
-		  cpm: 1
-		}
-	  }]
-	}];
+      },
+      bids: [{
+        bidder: 'adrelevantis',
+        params: {
+          placementId: 13144370,
+          cpm: 1
+        }
+      }]
+    }];
 
     
     googletag.cmd.push(function() {
@@ -101,10 +101,10 @@ bidFunc("Pets Dental Health,Pet,Pet dental", "/pets|/pets/cats");
 </head>
   <body>
     <h2>Native Content-Driven Advertising Examples</h2>
-	<div id='div-1' style='width: 30%; min-width: 300px; min-height: 250px;'>
-	<script>
-    googletag.cmd.push(function() { googletag.display('div-1'); });
-	</script>
-	</div>
+    <div id='div-1' style='width: 30%; min-width: 300px; min-height: 250px;'>
+      <script>
+        googletag.cmd.push(function() { googletag.display('div-1'); });
+      </script>
+    </div>
   </body>
 </html>
